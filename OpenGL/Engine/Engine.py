@@ -24,57 +24,22 @@ VAO = None
 VBO = None
 
 
-def initialize():
+def initialize(vertexData, vertexShaderStr, fragmentShaderStr):
     global shaderProgram
     global VAO
     global VBO
+    global vertecies
 
-    # Create one "object" (the triangle) and make it active ("bind" it)
+    vertecies = int(len(vertexData) / 8)
+
     VAO = GL.glGenVertexArrays(1)
     GL.glBindVertexArray(VAO)
 
-    vertexShader = shaders.compileShader("""
-#version 330
-
-layout (location=0) in vec4 position;
-layout (location=1) in vec4 colour;
-
-smooth out vec4 theColour;
-
-void main()
-{
-    gl_Position = position;
-    theColour = colour;
-}
-""", GL.GL_VERTEX_SHADER)
-
-    fragmentShader = shaders.compileShader("""
-#version 330
-
-out vec4 outputColour;
-smooth in vec4 theColour;
-
-void main()
-{
-    outputColour = theColour;
-}
-""", GL.GL_FRAGMENT_SHADER)
+    vertexShader = shaders.compileShader(vertexShaderStr, GL.GL_VERTEX_SHADER)
+    fragmentShader = shaders.compileShader(
+        fragmentShaderStr, GL.GL_FRAGMENT_SHADER)
 
     shaderProgram = shaders.compileProgram(vertexShader, fragmentShader)
-
-    vertexData = numpy.array([
-        # Vertex Positions
-        # x      # y      # z     # w
-        0.0,     0.5,    0.0,    1.0,
-        0.5,    -0.366,  0.0,    1.0,
-        -0.5,    -0.366,  0.0,    1.0,
-
-        # Vertex Colours
-        # R       # G     # B     # A
-        1.0,      0.0,    0.0,    1.0,
-        0.0,      1.0,    0.0,    1.0,
-        0.0,      0.0,    1.0,    1.0,
-    ], dtype=numpy.float32)
 
     # Allocate a buffer to contain the triangle's vertices and make it active ("bind" it)
     VBO = GL.glGenBuffers(1)
@@ -111,6 +76,7 @@ void main()
 def render():
     global shaderProgram
     global VAO
+
     GL.glClearColor(0.2, 0.2, 0.2, 1)
     GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
@@ -122,7 +88,7 @@ def render():
         GL.glBindVertexArray(VAO)
 
         # draw triangle
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3)
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, vertecies)
 
     finally:
         # Cleanup (just in case)
@@ -130,7 +96,7 @@ def render():
         GL.glUseProgram(0)
 
 
-def run():
+def run(vertexData, vertexShaderStr, fragmentShaderStr):
     if sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO) != 0:
         print(sdl2.SDL_GetError())
         return -1
@@ -152,7 +118,7 @@ def run():
     context = sdl2.SDL_GL_CreateContext(window)
 
     # Setup GL shaders, data, etc.
-    initialize()
+    initialize(vertexData, vertexShaderStr, fragmentShaderStr)
 
     event = sdl2.SDL_Event()
     running = True

@@ -55,6 +55,9 @@ void main() {
 
 """, GL.GL_FRAGMENT_SHADER)
 
+    VAO = GL.glGenVertexArrays(1)
+    GL.glBindVertexArray(VAO)
+
     shaderProgram = shaders.compileProgram(vertexShader, fragmentShader)
 
 
@@ -108,20 +111,32 @@ def run():
     bg = numpy.array([0.2, 0.2, 0.2, 1.0], dtype=numpy.float32)
 
     rectangle_specs = [
-        {'offset': numpy.array([-1, -0.5], dtype=numpy.float32), 'color': FlagBackground},
-        {'offset': numpy.array([-0.5, -0.5], dtype=numpy.float32), 'color': FlagStripes},
-        {'offset': numpy.array([0, -0.5], dtype=numpy.float32), 'color': FlagBackground},
-        {'offset': numpy.array([0.5, -0.5], dtype=numpy.float32), 'color': FlagBackground},
+        {'offset': numpy.array(
+            [-1, -0.5], dtype=numpy.float32), 'color': FlagBackground},
+        {'offset': numpy.array(
+            [-0.5, -0.5], dtype=numpy.float32), 'color': FlagStripes},
+        {'offset': numpy.array(
+            [0, -0.5], dtype=numpy.float32), 'color': FlagBackground},
+        {'offset': numpy.array(
+            [0.5, -0.5], dtype=numpy.float32), 'color': FlagBackground},
 
-        {'offset': numpy.array([-1, 0], dtype=numpy.float32), 'color': FlagStripes},
-        {'offset': numpy.array([-0.5, 0], dtype=numpy.float32), 'color': FlagStripes},
-        {'offset': numpy.array([0, 0], dtype=numpy.float32), 'color': FlagStripes},
-        {'offset': numpy.array([0.5, 0], dtype=numpy.float32), 'color': FlagStripes},
+        {'offset': numpy.array([-1, 0], dtype=numpy.float32),
+         'color': FlagStripes},
+        {'offset': numpy.array(
+            [-0.5, 0], dtype=numpy.float32), 'color': FlagStripes},
+        {'offset': numpy.array([0, 0], dtype=numpy.float32),
+         'color': FlagStripes},
+        {'offset': numpy.array(
+            [0.5, 0], dtype=numpy.float32), 'color': FlagStripes},
 
-        {'offset': numpy.array([-1, 0.5], dtype=numpy.float32), 'color': FlagBackground},
-        {'offset': numpy.array([-0.5, 0.5], dtype=numpy.float32), 'color': FlagStripes},
-        {'offset': numpy.array([0, 0.5], dtype=numpy.float32), 'color': FlagBackground},
-        {'offset': numpy.array([0.5, 0.5], dtype=numpy.float32), 'color': FlagBackground},
+        {'offset': numpy.array(
+            [-1, 0.5], dtype=numpy.float32), 'color': FlagBackground},
+        {'offset': numpy.array(
+            [-0.5, 0.5], dtype=numpy.float32), 'color': FlagStripes},
+        {'offset': numpy.array([0, 0.5], dtype=numpy.float32),
+         'color': FlagBackground},
+        {'offset': numpy.array(
+            [0.5, 0.5], dtype=numpy.float32), 'color': FlagBackground},
 
         {'offset': numpy.array([-1, 1], dtype=numpy.float32), 'color': bg},
         {'offset': numpy.array([-0.5, 1], dtype=numpy.float32), 'color': bg},
@@ -163,14 +178,20 @@ def rectangle(offset, color):
 
     triangles = [
         Triangle(numpy.array([
-            -width + offset[0],  width + offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
-            width + offset[0], -height + offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
-            -width + offset[0], -height + offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
+            -width + offset[0],  width +
+            offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
+            width + offset[0], -height +
+            offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
+            -width + offset[0], -height +
+            offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
         ], dtype=numpy.float32)),
         Triangle(numpy.array([
-            -width + offset[0],  width + offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
-            width + offset[0],  width + offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
-            width + offset[0], -height + offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
+            -width + offset[0],  width +
+            offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
+            width + offset[0],  width +
+            offset[1],  0.0, 1.0, color[0], color[1], color[2], color[3],
+            width + offset[0], -height +
+            offset[1], 0.0, 1.0, color[0], color[1], color[2], color[3],
         ], dtype=numpy.float32))
     ]
     return triangles
