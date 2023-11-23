@@ -19,6 +19,7 @@ import sdl2
 from sdl2 import video
 from numpy import array
 
+
 shaderProgram = None
 VAO = None
 VBO = None
@@ -28,9 +29,6 @@ def initialize(vertexData, vertexShaderStr, fragmentShaderStr):
     global shaderProgram
     global VAO
     global VBO
-    global vertecies
-
-    vertecies = int(len(vertexData) / 8)
 
     VAO = GL.glGenVertexArrays(1)
     GL.glBindVertexArray(VAO)
@@ -66,14 +64,14 @@ def initialize(vertexData, vertexShaderStr, fragmentShaderStr):
 
     # The last parameter is actually a pointer
     GL.glVertexAttribPointer(
-        1, 4, GL.GL_FLOAT, GL.GL_FALSE, 0, ctypes.c_void_p(48))
+        1, 4, GL.GL_FLOAT, GL.GL_FALSE, 0, ctypes.c_void_p(int(vertexData.nbytes / 2)))
 
     # Cleanup (just in case)
     GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
     GL.glBindVertexArray(0)
 
 
-def render():
+def render(vertexData):
     global shaderProgram
     global VAO
 
@@ -88,7 +86,7 @@ def render():
         GL.glBindVertexArray(VAO)
 
         # draw triangle
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, vertecies)
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, int(vertexData.nbytes / 16))
 
     finally:
         # Cleanup (just in case)
@@ -126,8 +124,11 @@ def run(vertexData, vertexShaderStr, fragmentShaderStr):
         while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:
             if event.type == sdl2.SDL_QUIT:
                 running = False
+            if event.type == sdl2.SDL_KEYDOWN:
+                vertexData = move_vertices(vertexData, event.key.keysym.sym)
+                initialize(vertexData, vertexShaderStr, fragmentShaderStr)
 
-        render()
+        render(vertexData)
 
         sdl2.SDL_GL_SwapWindow(window)
         sdl2.SDL_Delay(10)
@@ -136,6 +137,25 @@ def run(vertexData, vertexShaderStr, fragmentShaderStr):
     sdl2.SDL_DestroyWindow(window)
     sdl2.SDL_Quit()
     return 0
+
+
+def move_vertices(vertexData, key_sym, move_distance=0.1):
+    direction = {
+        sdl2.SDLK_w: (0, move_distance),  # Move up
+        sdl2.SDLK_s: (0, -move_distance),  # Move down
+        sdl2.SDLK_a: (-move_distance, 0),  # Move left
+        sdl2.SDLK_d: (move_distance, 0)   # Move right
+    }.get(key_sym, (0, 0))
+
+    dx, dy = direction
+    print(direction)
+
+
+    for i in range(0,  len(vertexData) // 2, 4):
+        vertexData[i] += dx
+        vertexData[i + 1] += dy
+
+    return vertexData
 
 
 if __name__ == "__main__":
