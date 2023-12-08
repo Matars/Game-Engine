@@ -7,6 +7,7 @@ pysdl2 OpenGL example
 http://www.arcsynthesis.org/gltut/Basics/Tut02%20Vertex%20Attributes.html
 http://schi.iteye.com/blog/1969710
 """
+from camera import Camera
 import sys
 import ctypes
 
@@ -19,6 +20,7 @@ from sdl2 import video
 import numpy as np
 
 from helpers import *
+from camera import Camera
 
 
 # use tralstion matrix to move the object istead
@@ -37,29 +39,7 @@ def move_vertices(obj, key_sym, move_distance=0.1):
         obj.vertices[i + 1] += dy
 
 
-# CAMERA LOGIC BELOW
-# TODO: move to a different file should not be in engine.py
-
-def moveCamera():
-    # https://learnopengl.com/Getting-started/Camera
-    # initial camera pos
-    cameraPos = np.array([0.0, 1.0, 3.0], dtype=np.float32)
-
-    # point to origin
-    cameraTarget = np.array([0.0, 0.0, 0.0], dtype=np.float32)
-
-    cameraDirection = normalize(np.subtract(cameraPos, cameraTarget))
-
-    upvector = np.array([0.0, 1.0, 0.0], dtype=np.float32)
-    cameraRight = normalize(np.cross(upvector, cameraDirection))
-
-    cameraUp = np.cross(cameraDirection, cameraRight)
-
-    cameraModel = getLookAtMatrix(cameraRight, cameraUp, cameraDirection, cameraPos)
-
-    return cameraModel
-
-# CAMERA LOGIC ABOVE
+camera = Camera()
 
 
 def render(objects):
@@ -68,7 +48,7 @@ def render(objects):
     GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
     for obj in objects:
-        obj.display()
+        obj.display(camera) 
 
 
 def run(objects, vertexShaderStr, fragmentShaderStr):
@@ -119,5 +99,4 @@ def run(objects, vertexShaderStr, fragmentShaderStr):
 
 
 if __name__ == "__main__":
-    # sys.exit(run())
-    moveCamera()
+    sys.exit(run())

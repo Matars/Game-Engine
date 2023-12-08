@@ -5,7 +5,6 @@ from OpenGL import GL
 from OpenGL.GL import shaders
 
 import numpy as np
-from Engine import moveCamera
 
 from helpers import *
 from Transformer import Transformer
@@ -106,22 +105,35 @@ class baseObj3D():
             self.vertices[i + 2] = b
             self.vertices[i + 3] = a
 
-    def display(self):
+    def display(self, camera):
+
+        LookMatrix = camera.getLookMatrix()
+        projectionMatrix = camera.getProjectionMatrix()
 
         # active shader program
         GL.glUseProgram(self.shaderProgram)
 
         # set the model matrix
         modelLoc = GL.glGetUniformLocation(self.shaderProgram, "model")
+        cameraLoc = GL.glGetUniformLocation(self.shaderProgram, "viewMatrix")
+        projLoc = GL.glGetUniformLocation(self.shaderProgram, "projection")
 
         GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
+        GL.glUniformMatrix4fv(cameraLoc, 1, True, LookMatrix)
+        GL.glUniformMatrix4fv(projLoc, 1, True, projectionMatrix)
 
         try:
+
             # Activate the object
             GL.glBindVertexArray(self.vao)
 
             # draw triangle
+            GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE)
+
             GL.glDrawArrays(GL.GL_TRIANGLES, 0, int(self.vertices.nbytes / 16))
+
+            # update camera position
+            camera.moveCamera()
 
         finally:
             # Cleanup (just in case)

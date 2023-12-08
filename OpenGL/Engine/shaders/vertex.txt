@@ -6,9 +6,12 @@ layout (location=1) in vec4 colour;
 smooth out vec4 theColour;
 
 uniform mat4 model;
+uniform mat4 viewMatrix;
+uniform mat4 projection;
+
 
 void main()
 {
-    gl_Position = position * model;
+    gl_Position = projection * viewMatrix * position * model; 
     theColour = colour;
 }
