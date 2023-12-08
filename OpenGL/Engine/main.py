@@ -13,13 +13,18 @@ def run():
     with open("shaders/fragment.txt", "r") as f:
         fragmentShaderStr = f.read()
 
-    cube1 = cube3D(0.0, 0.0, 1.0, 1.0)
-    cube2 = cube3D(1.0, 0.0, 0.0, 1.0)
+    cubeRed = cube3D(1.0, 0.0, 0.0, 1.0)
+    cubeGreen = cube3D(0.0, 1.0, 0.0, 1.0)
+    cubeBlue = cube3D(0.0, 0.0, 1.0, 1.0)
 
-    cube1.scaleAll(0.15)
-    cube2.scaleAll(0.15)
+    cubeRed.scaleAll(0.15)
+    cubeGreen.scaleAll(0.15)
+    cubeBlue.scaleAll(0.15)
 
-    cube2.translate(2.5, 0, 0)
+    cubeRed.translate(-2.5, 0, 0)
+    cubeGreen.translate(0, 0, 0)
+    cubeBlue.translate(2.5, 0, 0)
+
 
     """
     roof = prism3D()
@@ -38,7 +43,8 @@ def run():
     tree.translate(-5, 1, 0)
 
     """
-    objects = [cube1, cube2]
+
+    objects = [cubeRed, cubeGreen, cubeBlue]
 
     Engine.run(objects, vertexShaderStr, fragmentShaderStr)
 

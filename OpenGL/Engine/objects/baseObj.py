@@ -107,8 +107,15 @@ class baseObj3D():
 
     def display(self, camera):
 
-        LookMatrix = camera.getLookMatrix()
-        projectionMatrix = camera.getProjectionMatrix()
+        LookMatrix = camera.getViewMatrix()
+
+        fov = np.radians(60)
+        aspect_ratio = 4.0 / 3.0
+        near = 0.1
+        far = 100.0
+
+        PerspectiveMatrix = camera.getPerspectiveMatrix(
+            fov, aspect_ratio, near, far)
 
         # active shader program
         GL.glUseProgram(self.shaderProgram)
@@ -116,11 +123,11 @@ class baseObj3D():
         # set the model matrix
         modelLoc = GL.glGetUniformLocation(self.shaderProgram, "model")
         cameraLoc = GL.glGetUniformLocation(self.shaderProgram, "viewMatrix")
-        projLoc = GL.glGetUniformLocation(self.shaderProgram, "projection")
+        persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
 
-        GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
+        GL.glUniformMatrix4fv(modelLoc, 1, False, self.model)
+        GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
         GL.glUniformMatrix4fv(cameraLoc, 1, True, LookMatrix)
-        GL.glUniformMatrix4fv(projLoc, 1, True, projectionMatrix)
 
         try:
 
