@@ -9,6 +9,11 @@ class Camera:
         self.cameraTarget = np.array([0.0, 0.0, 0.0], dtype=np.float32)
         self.upvector = np.array([0.0, 1.0, 0.0], dtype=np.float32)
 
+        self.fov = np.radians(60)
+        self.aspect_ratio = 4.0 / 3.0
+        self.near = 1
+        self.far = 100.0
+
     def getViewMatrix(self):
         # https://learnopengl.com/Getting-started/Camera
         # initial camera pos
@@ -43,7 +48,7 @@ class Camera:
 
 
 
-    def getPerspectiveMatrix(self, fov, aspect_ratio, near, far):
+    def getPerspectiveMatrix(self):
         """
         Create a perspective projection matrix.
 
@@ -53,12 +58,12 @@ class Camera:
         near -- Near clipping plane
         far -- Far clipping plane
         """
-        f = 1.0 / np.tan(fov / 2)
+        f = 1.0 / np.tan(self.fov / 2)
         matrix = np.zeros((4, 4))
-        matrix[0, 0] = f / aspect_ratio
+        matrix[0, 0] = f / self.aspect_ratio
         matrix[1, 1] = f
-        matrix[2, 2] = (far + near) / (near - far)
-        matrix[2, 3] = (2 * far * near) / (near - far)
+        matrix[2, 2] = (self.far + self.near) / (self.near - self.far)
+        matrix[2, 3] = (2 * self.far * self.near) / (self.near - self.far)
         matrix[3, 2] = -1
         return matrix
 
@@ -71,4 +76,4 @@ class Camera:
         camZ = cos(time()) * radius
 
         # self.cameraPos = np.array([camX, 0.0, camZ], dtype=np.float32)
-        self.cameraPos = np.array([camX, 0.5, 1.5+camZ], dtype=np.float32)
+        self.cameraPos = np.array([camX, 0.5, 3], dtype=np.float32)

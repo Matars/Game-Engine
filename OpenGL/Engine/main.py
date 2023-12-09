@@ -25,9 +25,12 @@ def run():
     cubeGreen.translate(0, 0, 0)
     cubeBlue.translate(2.5, 0, 0)
 
+    cubeRed.rotate(45, 0, 0)
+    cubeGreen.rotate(0, 45, 0)
+    cubeBlue.rotate(0, 0, 45)
+
     floor = cube3D(0.0, 0.0, 0.0, 1.0)
     floor.scale(5, 0, 5)
-
 
     """
     roof = prism3D()

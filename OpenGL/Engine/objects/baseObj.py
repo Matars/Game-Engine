@@ -18,9 +18,9 @@ class baseObj3D():
         self.shaderProgram = None
         self.vao = None
         self.vbo = None
-        self.ebo = None # unused
+        self.ebo = None  # unused
         self.vertices = None
-        self.faces = None # unused
+        self.faces = None  # unused
 
         # probably should not be here
         self.transform(np.identity(4))
@@ -109,13 +109,7 @@ class baseObj3D():
 
         LookMatrix = camera.getViewMatrix()
 
-        fov = np.radians(60)
-        aspect_ratio = 4.0 / 3.0
-        near = 0.1
-        far = 100.0
-
-        PerspectiveMatrix = camera.getPerspectiveMatrix(
-            fov, aspect_ratio, near, far)
+        PerspectiveMatrix = camera.getPerspectiveMatrix()
 
         # active shader program
         GL.glUseProgram(self.shaderProgram)

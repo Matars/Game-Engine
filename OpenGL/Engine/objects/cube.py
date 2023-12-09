@@ -1,7 +1,7 @@
 import numpy as np
 
 from objects.baseObj import baseObj3D
-from helpers import loadObjMesh
+from helpers import loadMesh
 
 
 class cube3D(baseObj3D):
