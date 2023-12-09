@@ -18,9 +18,9 @@ class baseObj3D():
         self.shaderProgram = None
         self.vao = None
         self.vbo = None
-        self.ebo = None
+        self.ebo = None # unused
         self.vertices = None
-        self.faces = None
+        self.faces = None # unused
 
         # probably should not be here
         self.transform(np.identity(4))

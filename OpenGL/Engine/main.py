@@ -25,6 +25,9 @@ def run():
     cubeGreen.translate(0, 0, 0)
     cubeBlue.translate(2.5, 0, 0)
 
+    floor = cube3D(0.0, 0.0, 0.0, 1.0)
+    floor.scale(5, 0, 5)
+
 
     """
     roof = prism3D()
@@ -44,7 +47,7 @@ def run():
 
     """
 
-    objects = [cubeRed, cubeGreen, cubeBlue]
+    objects = [cubeRed, cubeGreen, cubeBlue, floor]
 
     Engine.run(objects, vertexShaderStr, fragmentShaderStr)
 

@@ -21,10 +21,27 @@ class Camera:
 
         cameraUp = np.cross(cameraDirection, cameraRight)
 
-        cameraMatrix = getLookAtMatrix(
+        cameraMatrix = self.getLookAtMatrix(
             cameraRight, cameraUp, cameraDirection, self.cameraPos)
 
         return cameraMatrix
+    
+    def getLookAtMatrix(self, rightVector, upVector, DirVector, cameraPos):
+        # https://i.imgur.com/0MrTyAu.png
+
+        mat1 = np.identity(4)
+        mat2 = np.identity(4)
+
+        # replace top 3x3 of the mat 1 matrix with mat2
+        mat1[:3, :3] = np.array([rightVector, upVector, DirVector])
+
+        # replace the last column of mat1 with the negative of the camera position
+        mat2[:3, 3] = np.array(cameraPos * -1)
+
+        cameraMatrix = mat2 @ mat1
+        return cameraMatrix
+
+
 
     def getPerspectiveMatrix(self, fov, aspect_ratio, near, far):
         """
@@ -54,4 +71,4 @@ class Camera:
         camZ = cos(time()) * radius
 
         # self.cameraPos = np.array([camX, 0.0, camZ], dtype=np.float32)
-        self.cameraPos = np.array([camX, 0.5, 3+camZ], dtype=np.float32)
+        self.cameraPos = np.array([camX, 0.5, 1.5+camZ], dtype=np.float32)
