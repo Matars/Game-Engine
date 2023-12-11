@@ -15,6 +15,17 @@ class cube3D(baseObj3D):
         self.vertices, self.faces = loadObjMesh(mesh_path)
         return self.vertices, self.faces
 
+    def changeSideColor(self, side, r, g, b, a=1):
+        # verticies length
+        colorsStart = len(self.vertices) // 2
+        colorsStart += side * 24
+
+        for i in range(colorsStart, colorsStart + 24, 4):
+            self.vertices[i] = r
+            self.vertices[i + 1] = g
+            self.vertices[i + 2] = b
+            self.vertices[i + 3] = a
+
     def cubeMesh(self, r, g, b, a):
         vertexData = np.array([
             # Vertex Positions

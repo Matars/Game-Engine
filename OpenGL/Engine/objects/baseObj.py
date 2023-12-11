@@ -96,19 +96,21 @@ class baseObj3D():
     def scaleAll(self, s):
         self.scale(s, s, s)
 
-    # -----------------------------
+    def setColor(self, r, g, b, a=1):
+        # verticies length
+        colorsStart = len(self.vertices) // 2
 
-    def setColor(self, r, g, b, a):
-        for i in range(int(self.vertices.nbytes // 2), len(self.vertices), 4):
+        for i in range(colorsStart, len(self.vertices), 4):
             self.vertices[i] = r
             self.vertices[i + 1] = g
             self.vertices[i + 2] = b
             self.vertices[i + 3] = a
 
+    # -----------------------------
+
     def display(self, camera):
 
         LookMatrix = camera.getViewMatrix()
-
         PerspectiveMatrix = camera.getPerspectiveMatrix()
 
         # active shader program
@@ -129,7 +131,7 @@ class baseObj3D():
             GL.glBindVertexArray(self.vao)
 
             # draw triangle
-            GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE)
+            GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL)
 
             GL.glDrawArrays(GL.GL_TRIANGLES, 0, int(self.vertices.nbytes / 16))
 

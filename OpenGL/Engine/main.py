@@ -29,26 +29,16 @@ def run():
     cubeGreen.rotate(0, 45, 0)
     cubeBlue.rotate(0, 0, 45)
 
+    for sidie in range(6):
+        from random import random
+        cubeRed.changeSideColor(sidie, random(), random(), random())
+        cubeGreen.changeSideColor(sidie, random(), random(), random())
+        cubeBlue.changeSideColor(sidie, random(), random(), random())
+
     floor = cube3D(0.0, 0.0, 0.0, 1.0)
+    floor.translate(0, -0.5, 0)
+    floor.setColor(0.8, 0.8, 0.8)
     floor.scale(5, 0, 5)
-
-    """
-    roof = prism3D()
-    roof.scaleAll(0.2)
-    roof.scale(1, 2, 1.7)
-    roof.translate(1.5, 1, 0)
-
-    treebase = cube3D(0.3, 0.25, 0.0, 1.0)
-    treebase.scaleAll(0.1)
-    treebase.scale(0.5, 2.5, 0.5)
-    treebase.translate(-15, -0.5, 0)
-
-    tree = cube3D(0, 1, 0, 1)
-    tree.scaleAll(0.1)
-    tree.scale(1.5, 2, 1.7)
-    tree.translate(-5, 1, 0)
-
-    """
 
     objects = [cubeRed, cubeGreen, cubeBlue, floor]
 

@@ -30,7 +30,7 @@ class Camera:
             cameraRight, cameraUp, cameraDirection, self.cameraPos)
 
         return cameraMatrix
-    
+
     def getLookAtMatrix(self, rightVector, upVector, DirVector, cameraPos):
         # https://i.imgur.com/0MrTyAu.png
 
@@ -45,8 +45,6 @@ class Camera:
 
         cameraMatrix = mat2 @ mat1
         return cameraMatrix
-
-
 
     def getPerspectiveMatrix(self):
         """
@@ -72,8 +70,8 @@ class Camera:
         from math import cos, sin
 
         radius = 1
-        camX = sin(time()) * radius
-        camZ = cos(time()) * radius
+        camX = cos(time()) * radius
+        camZ = sin(time()) * radius
 
         # self.cameraPos = np.array([camX, 0.0, camZ], dtype=np.float32)
         self.cameraPos = np.array([camX, 0.5, 3], dtype=np.float32)

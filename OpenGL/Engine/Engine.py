@@ -12,8 +12,6 @@ import sys
 import ctypes
 
 from OpenGL import GL, GLU
-from OpenGL.GL import shaders
-from OpenGL.arrays import vbo
 
 import sdl2
 from sdl2 import video
@@ -21,22 +19,6 @@ import numpy as np
 
 from helpers import *
 from camera import Camera
-
-
-# use tralstion matrix to move the object istead
-def move_vertices(obj, key_sym, move_distance=0.1):
-    direction = {
-        sdl2.SDLK_w: (0, move_distance),  # Move up
-        sdl2.SDLK_s: (0, -move_distance),  # Move down
-        sdl2.SDLK_a: (-move_distance, 0),  # Move left
-        sdl2.SDLK_d: (move_distance, 0)   # Move right
-    }.get(key_sym, (0, 0))
-
-    dx, dy = direction
-
-    for i in range(0,  len(obj.vertices) // 2, 4):
-        obj.vertices[i] += dx
-        obj.vertices[i + 1] += dy
 
 
 camera = Camera()
@@ -48,7 +30,7 @@ def render(objects):
     GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
     for obj in objects:
-        obj.display(camera) 
+        obj.display(camera)
 
 
 def run(objects, vertexShaderStr, fragmentShaderStr):
@@ -82,10 +64,6 @@ def run(objects, vertexShaderStr, fragmentShaderStr):
         while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:
             if event.type == sdl2.SDL_QUIT:
                 running = False
-            if event.type == sdl2.SDL_KEYDOWN:
-                for obj in objects:
-                    move_vertices(obj, event.key.keysym.sym)
-                    obj.initialize(vertexShaderStr, fragmentShaderStr)
 
         render(objects)
 
