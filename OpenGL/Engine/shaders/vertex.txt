@@ -1,0 +1,17 @@
+#version 330
+
+layout (location=0) in vec4 position;
+layout (location=1) in vec4 colour;
+
+smooth out vec4 theColour;
+
+uniform mat4 model;
+uniform mat4 viewMatrix;
+uniform mat4 perspective;
+
+
+void main()
+{
+    gl_Position = perspective * viewMatrix * model * position; 
+    theColour = colour;
+}
