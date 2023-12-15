@@ -91,12 +91,15 @@ class baseObj3D():
         self.transform(translationMatrix)
 
     def rotate(self, angleX: float, angleY: float, angleZ: float) -> None:
-        # https://i.imgur.com/0cu8maY.png
+        from math import cos, sin
         """
         Rotates the model by applying the given rotation angle around the given axis.
 
         Args:
             angleX, angleY, angleZ: The rotation angles around the x, y, and z axes.
+
+        References:
+            https://i.imgur.com/0cu8maY.png
 
         """
 
@@ -109,20 +112,20 @@ class baseObj3D():
         Ry = np.identity(4)
         Rx = np.identity(4)
 
-        Rz[0, 0] = np.cos(angleZ)
-        Rz[0, 1] = -np.sin(angleZ)
-        Rz[1, 0] = np.sin(angleZ)
-        Rz[1, 1] = np.cos(angleZ)
+        Rz[0, 0] = cos(angleZ)
+        Rz[0, 1] = -sin(angleZ)
+        Rz[1, 0] = sin(angleZ)
+        Rz[1, 1] = cos(angleZ)
 
-        Ry[0, 0] = np.cos(angleY)
-        Ry[0, 2] = np.sin(angleY)
-        Ry[2, 0] = -np.sin(angleY)
-        Ry[2, 2] = np.cos(angleY)
+        Ry[0, 0] = cos(angleY)
+        Ry[0, 2] = sin(angleY)
+        Ry[2, 0] = -sin(angleY)
+        Ry[2, 2] = cos(angleY)
 
-        Rx[1, 1] = np.cos(angleX)
-        Rx[1, 2] = -np.sin(angleX)
-        Rx[2, 1] = np.sin(angleX)
-        Rx[2, 2] = np.cos(angleX)
+        Rx[1, 1] = cos(angleX)
+        Rx[1, 2] = -sin(angleX)
+        Rx[2, 1] = sin(angleX)
+        Rx[2, 2] = cos(angleX)
 
         rotationMatrix = Rz @ Ry @ Rx
 
