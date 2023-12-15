@@ -19,8 +19,6 @@ This is a simple OpenGL game engine built in Python. It provides basic functiona
 
 `camera.py`: Defines the Camera class for controlling the view into the scene.
 
-`helpers.py`: Contains utility functions.
-
-`objects/`: Contains classes for different types of 3D objects.
+`objects/`: Contains classes for different types of 3D objects and a baseObj class that is inhereted by the other object classes
 
 `shaders/`: Contains GLSL shader programs.
