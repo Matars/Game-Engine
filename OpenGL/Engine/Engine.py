@@ -10,13 +10,8 @@ http://schi.iteye.com/blog/1969710
 import sys
 import ctypes
 
-from OpenGL import GL, GLU
-
 import sdl2
 from sdl2 import video
-import numpy as np
-
-from helpers import *
 
 
 def run(scene, vertexShaderStr, fragmentShaderStr):

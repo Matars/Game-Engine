@@ -1,10 +1,12 @@
 
 import numpy as np
-from helpers import *
+
+
+def normalize(v): return v / np.linalg.norm(v)
 
 
 class Camera:
-    def __init__(self, initialPos, camTarget) -> None:
+    def __init__(self, initialPos: list[float, float, float], camTarget: list[float, float, float]) -> None:
 
         self.initCameraPos = np.array(initialPos, dtype=np.float32)
         self.cameraPos = self.initCameraPos
@@ -17,11 +19,16 @@ class Camera:
         self.near = 1
         self.far = 1000
 
-    def getViewMatrix(self):
-        # https://learnopengl.com/Getting-started/Camera
-        # initial camera pos
+    def getViewMatrix(self) -> np.ndarray:
+        """
+        Create a view matrix.
 
-        # point to origin
+        Returns:
+            np.ndarray: view matrix
+
+        References:
+            https://learnopengl.com/Getting-started/Camera
+        """
         self.cameraDirection = normalize(np.subtract(
             self.cameraPos, self.cameraTarget))
 
@@ -30,12 +37,20 @@ class Camera:
 
         self.cameraUp = np.cross(self.cameraDirection, self.cameraRight)
 
-        self.getLookAtMatrix()
+        self.cameraMatrix = self.getLookAtMatrix()
 
         return self.cameraMatrix
 
-    def getLookAtMatrix(self):
-        # https://i.imgur.com/0MrTyAu.png
+    def getLookAtMatrix(self) -> np.ndarray:
+        """
+        Create a look at matrix.
+
+        Returns:
+            np.ndarray: LookAt matrix
+
+        References:
+            https://i.imgur.com/0MrTyAu.png
+        """
 
         mat1 = np.identity(4)
         mat2 = np.identity(4)
@@ -47,17 +62,20 @@ class Camera:
         # replace the last column of mat1 with the negative of the camera position
         mat2[:3, 3] = np.array(self.cameraPos * -1)
 
-        self.cameraMatrix = mat1 @ mat2
+        return mat1 @ mat2
 
-    def getPerspectiveMatrix(self):
+    def getPerspectiveMatrix(self) -> np.ndarray:
         """
         Create a perspective projection matrix.
 
-        Parameters:
-        fov -- Field of View, in radians
-        aspect_ratio -- Aspect ratio of the viewport
-        near -- Near clipping plane
-        far -- Far clipping plane
+        Returns:
+            np.ndarray: Perspective projection matrix
+
+        Args:
+            fov: Field of View, in radians
+            aspect_ratio: Aspect ratio of the viewport
+            near: Near clipping plane
+            far: Far clipping plane
         """
         f = 1.0 / np.tan(self.fov / 2)
         matrix = np.zeros((4, 4))
@@ -68,7 +86,10 @@ class Camera:
         matrix[3, 2] = -1
         return matrix
 
-    def moveCamera(self):
+    def moveCamera(self) -> None:
+        """
+        Move the camera in a circle around the target.
+        """
         from time import time
         from math import cos, sin
 

@@ -1,9 +1,5 @@
 
-import numpy as np
-
-
-def normalize(v): return v / np.linalg.norm(v)
-
+# UNUSED, just for testing
 
 def loadMesh(filename: str) -> list[float]:
     v = []
@@ -28,6 +24,7 @@ def loadMesh(filename: str) -> list[float]:
 
     # x, y, z, s, t, nx, ny, nz
     return vertices
+
 
 def read_vertex_data(words: list[str]) -> list[float]:
     """
@@ -99,6 +96,6 @@ def make_corner(corner_description: str,
 
 
 if __name__ == "__main__":
-    vertices, faces = loadObjMesh("objects\objectsMesh\cubeMesh.obj")
+    vertices, faces = loadMesh("cubeMesh.obj")
     print(vertices)
     print(faces)

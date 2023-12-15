@@ -7,6 +7,7 @@ from objects.baseObj import baseObj3D
 
 import numpy as np
 
+# UNUSED
 
 class sphere3D(baseObj3D):
     def __init__(self, radius, mun_segments):

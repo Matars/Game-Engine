@@ -15,6 +15,7 @@ class Scene:
         for obj in self.objects:
             obj.display(self.camera)
 
+        # make cubes spin
         for obj in self.objects[:-1]:
             obj.rotate(1, 1, 1)
 

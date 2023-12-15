@@ -6,9 +6,6 @@ from OpenGL.GL import shaders
 
 import numpy as np
 
-from helpers import *
-from Transformer import Transformer
-
 import numpy as np
 
 
@@ -69,34 +66,101 @@ class baseObj3D():
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
         GL.glBindVertexArray(0)
 
-    # -----------------------------
-
-    def transform(self, matrix):
+    def transform(self, matrix: np.ndarray) -> None:
         """
         Transforms the model by applying the given transformation matrix.
 
         Args:
-            matrix (np.ndarray): A 4x4 transformation matrix.
+            matrix: A 4x4 transformation matrix.
         """
-        # unsure of the correct order here
+
         self.model = matrix @ self.model
 
-    def translate(self, dx, dy, dz):
-        matrix = Transformer.translate(dx, dy, dz)
-        self.transform(matrix)
+    def translate(self, dx: float, dy: float, dz: float) -> None:
+        """
+        Translates the model by applying the given translation factors.
 
-    def rotate(self, angleX, angleY, angleZ):
-        matrix = Transformer.rotate(angleX, angleY, angleZ)
-        self.transform(matrix)
+        Args:
+            dx, dy, dz: The translation factors along the x, y, and z axes.
+        """
+        translationMatrix = np.identity(4)
+        translationMatrix[3, 0] = dx
+        translationMatrix[3, 1] = dy
+        translationMatrix[3, 2] = dz
 
-    def scale(self, dx, dy, dz):
-        matrix = Transformer.scale(dx, dy, dz)
-        self.transform(matrix)
+        self.transform(translationMatrix)
 
-    def scaleAll(self, s):
+    def rotate(self, angleX: float, angleY: float, angleZ: float) -> None:
+        # https://i.imgur.com/0cu8maY.png
+        """
+        Rotates the model by applying the given rotation angle around the given axis.
+
+        Args:
+            angleX, angleY, angleZ: The rotation angles around the x, y, and z axes.
+
+        """
+
+        # turn the angles into radians
+        angleX = np.radians(angleX)
+        angleY = np.radians(angleY)
+        angleZ = np.radians(angleZ)
+
+        Rz = np.identity(4)
+        Ry = np.identity(4)
+        Rx = np.identity(4)
+
+        Rz[0, 0] = np.cos(angleZ)
+        Rz[0, 1] = -np.sin(angleZ)
+        Rz[1, 0] = np.sin(angleZ)
+        Rz[1, 1] = np.cos(angleZ)
+
+        Ry[0, 0] = np.cos(angleY)
+        Ry[0, 2] = np.sin(angleY)
+        Ry[2, 0] = -np.sin(angleY)
+        Ry[2, 2] = np.cos(angleY)
+
+        Rx[1, 1] = np.cos(angleX)
+        Rx[1, 2] = -np.sin(angleX)
+        Rx[2, 1] = np.sin(angleX)
+        Rx[2, 2] = np.cos(angleX)
+
+        rotationMatrix = Rz @ Ry @ Rx
+
+        self.transform(rotationMatrix)
+
+    def scale(self, dx: float, dy: float, dz: float) -> None:
+        """
+        Scales the model by applying the given scale factors.
+
+        Args:
+            dx, dy, dz: The scale factors along the x, y, and z axes.
+        """
+        scaleMatrix = np.identity(4)
+        scaleMatrix[0, 0] = dx
+        scaleMatrix[1, 1] = dy
+        scaleMatrix[2, 2] = dz
+
+        self.transform(scaleMatrix)
+
+    def scaleAll(self, s: float) -> None:
+        """
+        Scales the model by applying the given scale factor to all axes.
+
+        Args:
+            s (float): scale factor
+        """
         self.scale(s, s, s)
 
-    def setColor(self, r, g, b, a=1):
+    def setColor(self, r: float, g: float, b: float, a: float = 1) -> None:
+        """
+        Sets the color of the object.
+
+        Args:
+            r (float): 0-1
+            g (float): 0-1
+            b (float): 0-1
+            a (float, optional): 0-1. Defaults to 1.
+        """
         # verticies length
         colorsStart = len(self.vertices) // 2
 
@@ -108,7 +172,13 @@ class baseObj3D():
 
     # -----------------------------
 
-    def display(self, camera):
+    def display(self, camera) -> None:
+        """
+        Displays the object.
+
+        Args:
+            camera (Camera): The camera object.
+        """
 
         LookMatrix = camera.getViewMatrix()
         PerspectiveMatrix = camera.getPerspectiveMatrix()
@@ -121,6 +191,7 @@ class baseObj3D():
         cameraLoc = GL.glGetUniformLocation(self.shaderProgram, "viewMatrix")
         persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
 
+        # not sure why but setting transpose to true breaks it
         GL.glUniformMatrix4fv(modelLoc, 1, False, self.model)
         GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
         GL.glUniformMatrix4fv(cameraLoc, 1, True, LookMatrix)
