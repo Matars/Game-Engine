@@ -7,7 +7,6 @@ pysdl2 OpenGL example
 http://www.arcsynthesis.org/gltut/Basics/Tut02%20Vertex%20Attributes.html
 http://schi.iteye.com/blog/1969710
 """
-from camera import Camera
 import sys
 import ctypes
 
@@ -18,22 +17,9 @@ from sdl2 import video
 import numpy as np
 
 from helpers import *
-from camera import Camera
 
 
-camera = Camera()
-
-
-def render(objects):
-    GL.glClearColor(0.2, 0.2, 0.2, 1)
-    GL.glEnable(GL.GL_DEPTH_TEST)
-    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-
-    for obj in objects:
-        obj.display(camera)
-
-
-def run(objects, vertexShaderStr, fragmentShaderStr):
+def run(scene, vertexShaderStr, fragmentShaderStr):
     if sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO) != 0:
         print(sdl2.SDL_GetError())
         return -1
@@ -54,9 +40,7 @@ def run(objects, vertexShaderStr, fragmentShaderStr):
                               video.SDL_GL_CONTEXT_PROFILE_CORE)
     context = sdl2.SDL_GL_CreateContext(window)
 
-    # Setup GL shaders, data, etc.
-    for obj in objects:
-        obj.initialize(vertexShaderStr, fragmentShaderStr)
+    scene.initializeObjects(vertexShaderStr, fragmentShaderStr)
 
     event = sdl2.SDL_Event()
     running = True
@@ -65,7 +49,7 @@ def run(objects, vertexShaderStr, fragmentShaderStr):
             if event.type == sdl2.SDL_QUIT:
                 running = False
 
-        render(objects)
+        scene.render()
 
         sdl2.SDL_GL_SwapWindow(window)
         sdl2.SDL_Delay(10)

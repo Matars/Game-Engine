@@ -1,7 +1,7 @@
 import numpy as np
 
 from objects.baseObj import baseObj3D
-from helpers import loadMesh
+from helpers import normalize
 
 
 class cube3D(baseObj3D):
@@ -25,6 +25,7 @@ class cube3D(baseObj3D):
             self.vertices[i + 1] = g
             self.vertices[i + 2] = b
             self.vertices[i + 3] = a
+    
 
     def cubeMesh(self, r, g, b, a):
         vertexData = np.array([

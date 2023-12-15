@@ -16,20 +16,18 @@ def loadMesh(filename: str) -> list[float]:
         line = file.readline()
         while line:
             words = line.split(" ")
-            match words[0]:
-                case "v":
-                    v.append(read_vertex_data(words))
-                case "vt":
-                    vt.append(read_texcoord_data(words))
-                case "vn":
-                    vn.append(read_normal_data(words))
-                case "f":
-                    read_face_data(words, v, vt, vn, vertices)
+            if words[0] == "v":
+                v.append(read_vertex_data(words))
+            elif words[0] == "vt":
+                vt.append(read_texcoord_data(words))
+            elif words[0] == "vn":
+                vn.append(read_normal_data(words))
+            elif words[0] == "f":
+                read_face_data(words, v, vt, vn, vertices)
             line = file.readline()
 
     # x, y, z, s, t, nx, ny, nz
     return vertices
-
 
 def read_vertex_data(words: list[str]) -> list[float]:
     """

@@ -4,47 +4,50 @@ from helpers import *
 
 
 class Camera:
-    def __init__(self) -> None:
-        self.cameraPos = np.array([0.0, 1.0, 3.0], dtype=np.float32)
-        self.cameraTarget = np.array([0.0, 0.0, 0.0], dtype=np.float32)
+    def __init__(self, initialPos, camTarget) -> None:
+
+        self.initCameraPos = np.array(initialPos, dtype=np.float32)
+        self.cameraPos = self.initCameraPos
+
+        self.cameraTarget = np.array(camTarget, dtype=np.float32)
         self.upvector = np.array([0.0, 1.0, 0.0], dtype=np.float32)
 
         self.fov = np.radians(60)
         self.aspect_ratio = 4.0 / 3.0
         self.near = 1
-        self.far = 100.0
+        self.far = 1000
 
     def getViewMatrix(self):
         # https://learnopengl.com/Getting-started/Camera
         # initial camera pos
 
         # point to origin
-        cameraDirection = normalize(np.subtract(
+        self.cameraDirection = normalize(np.subtract(
             self.cameraPos, self.cameraTarget))
 
-        cameraRight = normalize(np.cross(self.upvector, cameraDirection))
+        self.cameraRight = normalize(
+            np.cross(self.upvector, self.cameraDirection))
 
-        cameraUp = np.cross(cameraDirection, cameraRight)
+        self.cameraUp = np.cross(self.cameraDirection, self.cameraRight)
 
-        cameraMatrix = self.getLookAtMatrix(
-            cameraRight, cameraUp, cameraDirection, self.cameraPos)
+        self.getLookAtMatrix()
 
-        return cameraMatrix
+        return self.cameraMatrix
 
-    def getLookAtMatrix(self, rightVector, upVector, DirVector, cameraPos):
+    def getLookAtMatrix(self):
         # https://i.imgur.com/0MrTyAu.png
 
         mat1 = np.identity(4)
         mat2 = np.identity(4)
 
         # replace top 3x3 of the mat 1 matrix with mat2
-        mat1[:3, :3] = np.array([rightVector, upVector, DirVector])
+        mat1[:3, :3] = np.array(
+            [self.cameraRight, self.cameraUp, self.cameraDirection])
 
         # replace the last column of mat1 with the negative of the camera position
-        mat2[:3, 3] = np.array(cameraPos * -1)
+        mat2[:3, 3] = np.array(self.cameraPos * -1)
 
-        cameraMatrix = mat2 @ mat1
-        return cameraMatrix
+        self.cameraMatrix = mat1 @ mat2
 
     def getPerspectiveMatrix(self):
         """
@@ -69,9 +72,10 @@ class Camera:
         from time import time
         from math import cos, sin
 
-        radius = 1
-        camX = cos(time()) * radius
-        camZ = sin(time()) * radius
+        radius = 5
+        camX = sin(time()) * radius * self.initCameraPos[0]
+        camY = self.initCameraPos[1]
+        camZ = cos(time()) * radius * self.initCameraPos[2]
 
         # self.cameraPos = np.array([camX, 0.0, camZ], dtype=np.float32)
-        self.cameraPos = np.array([camX, 0.5, 3], dtype=np.float32)
+        self.cameraPos = np.array([camX, camY, camZ], dtype=np.float32)
