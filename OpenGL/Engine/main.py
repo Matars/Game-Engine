@@ -38,6 +38,8 @@ def createObjects() -> list[cube3D]:
     cubeMiddle.translate(0, 0, 0)
     cubeRight.translate(2.5, 0, 0)
 
+    cubeMiddle.scale(2, 2, 2)
+
     cubeLeft.rotate(45, 0, 0)
     cubeMiddle.rotate(0, 45, 0)
     cubeRight.rotate(0, 0, 45)
