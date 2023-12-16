@@ -59,8 +59,9 @@ class Camera:
         mat1[:3, :3] = np.array(
             [self.cameraRight, self.cameraUp, self.cameraDirection])
 
+
         # replace the last column of mat1 with the negative of the camera position
-        mat2[:3, 3] = np.array(self.cameraPos * -1)
+        mat2[:3, 3] = np.array(-self.cameraPos)
 
         return mat1 @ mat2
 

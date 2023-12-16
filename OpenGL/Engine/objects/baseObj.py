@@ -74,7 +74,7 @@ class baseObj3D():
             matrix: A 4x4 transformation matrix.
         """
 
-        self.model = matrix @ self.model
+        self.model = self.model @ matrix
 
     def translate(self, dx: float, dy: float, dz: float) -> None:
         """
@@ -84,9 +84,9 @@ class baseObj3D():
             dx, dy, dz: The translation factors along the x, y, and z axes.
         """
         translationMatrix = np.identity(4)
-        translationMatrix[3, 0] = dx
-        translationMatrix[3, 1] = dy
-        translationMatrix[3, 2] = dz
+        translationMatrix[0, 3] = dx
+        translationMatrix[1, 3] = dy
+        translationMatrix[2, 3] = dz
 
         self.transform(translationMatrix)
 
@@ -195,7 +195,7 @@ class baseObj3D():
         persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
 
         # not sure why but setting transpose to true breaks it
-        GL.glUniformMatrix4fv(modelLoc, 1, False, self.model)
+        GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
         GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
         GL.glUniformMatrix4fv(cameraLoc, 1, True, LookMatrix)
 
