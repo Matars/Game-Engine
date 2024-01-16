@@ -47,12 +47,12 @@ class baseObj3D():
 
         # Describe the first attribute: the position
         # - location: 0                 (remember the shader?)
-        # - size of each vertex: 4      (vec4)
+        # - size of each vertex: 3      (vec3)
         # - type of vertices: float
         # - do not normalize            (ignore for now)
         # - stride: 0                   (there is no space between vertices)
         # - offset: None                (start from the first element; no offset)
-        GL.glVertexAttribPointer(0, 4, GL.GL_FLOAT, GL.GL_TRUE, 0, None)
+        GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, GL.GL_FALSE, 6*4, None)
 
         # The same for the second attribute: the color of each vertex
         GL.glEnableVertexAttribArray(1)
@@ -60,7 +60,7 @@ class baseObj3D():
         # The last parameter is actually a pointer
         GL.glVertexAttribPointer(
             # this line says that the color starts half way thorugh the vertex data
-            1, 4, GL.GL_FLOAT, GL.GL_TRUE, 0, ctypes.c_void_p(int(self.vertices.nbytes / 2)))
+            1, 3, GL.GL_FLOAT, GL.GL_FALSE, 6*4, ctypes.c_void_p(3*4))
 
         # Cleanup (just in case)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
@@ -194,6 +194,7 @@ class baseObj3D():
         cameraLoc = GL.glGetUniformLocation(self.shaderProgram, "viewMatrix")
         persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
 
+
         # not sure why but setting transpose to true breaks it
         GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
         GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
@@ -208,9 +209,6 @@ class baseObj3D():
             GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL)
 
             GL.glDrawArrays(GL.GL_TRIANGLES, 0, int(self.vertices.nbytes / 16))
-
-            # update camera position
-            camera.moveCamera()
 
         finally:
             # Cleanup (just in case)

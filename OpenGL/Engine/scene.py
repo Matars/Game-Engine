@@ -4,7 +4,6 @@ from OpenGL import GL, GLU
 class Scene:
     def __init__(self, objects, camera):
         self.objects = objects
-        self.lights = []
         self.camera = camera
 
     def render(self):
@@ -14,10 +13,6 @@ class Scene:
 
         for obj in self.objects:
             obj.display(self.camera)
-
-        # make cubes spin
-        for obj in self.objects[:-1]:
-            obj.rotate(1, 1, 1)
 
     def initializeObjects(self, vertexShaderStr, fragmentShaderStr):
         for obj in self.objects:
