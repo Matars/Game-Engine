@@ -175,7 +175,7 @@ class baseObj3D():
 
     # -----------------------------
 
-    def display(self, camera) -> None:
+    def display(self, camera, light) -> None:
         """
         Displays the object.
 
@@ -195,10 +195,13 @@ class baseObj3D():
         persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
 
 
-        # not sure why but setting transpose to true breaks it
         GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
         GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
         GL.glUniformMatrix4fv(cameraLoc, 1, True, LookMatrix)
+
+        lightpos = GL.glGetUniformLocation(self.shaderProgram, "lightPos")
+
+        GL.glUniform3fv(lightpos, 1, light.getPos())
 
         try:
 

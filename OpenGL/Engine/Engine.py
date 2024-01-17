@@ -43,8 +43,9 @@ def run(scene, vertexShaderStr, fragmentShaderStr):
         while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:
             if event.type == sdl2.SDL_QUIT:
                 running = False
-
+            
         scene.render()
+        
 
         sdl2.SDL_GL_SwapWindow(window)
         sdl2.SDL_Delay(10)

@@ -3,7 +3,7 @@ import Engine
 from objects.cube import cube3D
 from scene import Scene
 from camera import Camera
-
+from light import Light
 
 def run():
     # get camera position
@@ -17,9 +17,12 @@ def run():
 
     initCameraPos = [0, 0, 20]
     camTarget = [0, 0, 0]
+    initLightPos = [0.0, 0.0, 0.0]
+    
     camera = Camera(initCameraPos, camTarget)
+    light = Light(initLightPos)
 
-    scene = Scene(objects, camera)
+    scene = Scene(objects, camera, light)
 
     Engine.run(scene, vertexShaderStr, fragmentShaderStr)
 
