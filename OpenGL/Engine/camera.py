@@ -139,7 +139,7 @@ class Camera:
 class CameraController:
     def __init__(self, scene):
         self.camera = scene.getCamera()
-        self.moveSpeed = 0.1
+        self.moveSpeed = 0.5
         self.turnSpeed = 0.5
     
     

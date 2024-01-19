@@ -2,10 +2,10 @@ from OpenGL import GL, GLU
 from camera import CameraController
 
 class Scene:
-    def __init__(self, objects, camera, light):
+    def __init__(self, objects, camera, lights):
         self.objects = objects
         self.camera = camera
-        self.light = light
+        self.lights = lights
         self.controller = CameraController(self)
 
     def render(self):
@@ -16,8 +16,8 @@ class Scene:
         self.controller.handle_keys()
 
         for obj in self.objects:
-            obj.display(self.camera, self.light)
-        
+            for light in self.lights:
+                obj.display(self.camera, light)
         
     def initializeObjects(self, vertexShaderStr, fragmentShaderStr):
         for obj in self.objects:
