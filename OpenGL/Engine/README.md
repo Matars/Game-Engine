@@ -2,6 +2,10 @@
 
 This is a simple OpenGL game engine built in Python. It provides basic functionality for creating 3D objects and rendering them in a scene.
 
+## Movement
+
+use wasd for movement and arrow keys for direction movement
+
 ## Features
 
 - Basic 3D object creation
