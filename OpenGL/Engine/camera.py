@@ -38,7 +38,7 @@ class Camera:
         """
         # self.cameraDirection = normalize(np.subtract(
         #     self.cameraPos, self.cameraTarget))
-        
+
         self.cameraDirection = -self.cameraFront
 
         self.cameraRight = normalize(
@@ -69,7 +69,7 @@ class Camera:
 
         mat1[:3, :3] = np.array(
             [self.cameraRight, self.cameraUp, self.cameraDirection])
-        
+
         # replace the last column of mat1 with the negative of the camera position
         mat2[:3, 3] = np.array(-self.cameraPos)
 
@@ -129,20 +129,22 @@ class Camera:
         self.update_camera_vectors()
 
     def update_camera_vectors(self):
-        front = self.cameraFront 
-        front[0] = np.cos(np.radians(self.yaw)) * np.cos(np.radians(self.pitch))
+        front = self.cameraFront
+        front[0] = np.cos(np.radians(self.yaw)) * \
+            np.cos(np.radians(self.pitch))
         front[1] = np.sin(np.radians(self.pitch))
-        front[2] = np.sin(np.radians(self.yaw)) * np.cos(np.radians(self.pitch))
+        front[2] = np.sin(np.radians(self.yaw)) * \
+            np.cos(np.radians(self.pitch))
 
         self.cameraFront = normalize(front)
+
 
 class CameraController:
     def __init__(self, scene):
         self.camera = scene.getCamera()
         self.moveSpeed = 0.5
         self.turnSpeed = 0.5
-    
-    
+
     def handle_keys(self):
         keys = sdl2.SDL_GetKeyboardState(None)
 
@@ -151,15 +153,17 @@ class CameraController:
         if keys[sdl2.SDL_SCANCODE_S]:
             self.camera.cameraPos -= self.moveSpeed * self.camera.cameraFront
         if keys[sdl2.SDL_SCANCODE_A]:
-            self.camera.cameraPos -= normalize(np.cross(self.camera.cameraFront, self.camera.upvector)) * self.moveSpeed;
+            self.camera.cameraPos -= normalize(
+                np.cross(self.camera.cameraFront, self.camera.upvector)) * self.moveSpeed
         if keys[sdl2.SDL_SCANCODE_D]:
-            self.camera.cameraPos += normalize(np.cross(self.camera.cameraFront, self.camera.upvector)) * self.moveSpeed;
+            self.camera.cameraPos += normalize(
+                np.cross(self.camera.cameraFront, self.camera.upvector)) * self.moveSpeed
 
-        if keys[sdl2.SDL_SCANCODE_UP]:
+        if keys[sdl2.SDL_SCANCODE_UP] or keys[sdl2.SDL_SCANCODE_I]:
             self.camera.process_mouse_movement(0, 10)
-        if keys[sdl2.SDL_SCANCODE_DOWN]:
+        if keys[sdl2.SDL_SCANCODE_DOWN] or keys[sdl2.SDL_SCANCODE_K]:
             self.camera.process_mouse_movement(0, -10)
-        if keys[sdl2.SDL_SCANCODE_LEFT]:
+        if keys[sdl2.SDL_SCANCODE_LEFT] or keys[sdl2.SDL_SCANCODE_J]:
             self.camera.process_mouse_movement(-10, 0)
-        if keys[sdl2.SDL_SCANCODE_RIGHT]:
+        if keys[sdl2.SDL_SCANCODE_RIGHT] or keys[sdl2.SDL_SCANCODE_L]:
             self.camera.process_mouse_movement(10, 0)

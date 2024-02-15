@@ -9,11 +9,14 @@ import numpy as np
 from OpenGL.GL import *
 from PIL import Image
 
+from objects.objectsMesh.loadMeshTesting import loadMesh
+
 
 class cube3D():
     def __init__(self, img_path):
         self.model = np.identity(4)
-        self.vertices = self.cubeMesh()
+        # self.vertices = self.cubeMesh()
+        self.vertices = loadMesh("objects\objectsMesh\plane.obj")
 
         self.shaderProgram = None
         self.vao = None
@@ -70,7 +73,8 @@ class cube3D():
         GL.glEnableVertexAttribArray(2)
 
         # Describe the third attribute: the texture coordinates
-        GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, GL.GL_FALSE, 8*4, ctypes.c_void_p(6*4))
+        GL.glVertexAttribPointer(
+            2, 2, GL.GL_FLOAT, GL.GL_FALSE, 8*4, ctypes.c_void_p(6*4))
 
         # Cleanup (just in case)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
@@ -185,58 +189,58 @@ class cube3D():
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
         # Specify the texture image
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width,
+                     image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data)
 
         # Generate mipmaps
         glGenerateMipmap(GL_TEXTURE_2D)
 
-
     def cubeMesh(self):
         verticies = np.array([
-        # Vertex Positions
-        # x    y     z     nx    ny   nz, u, v
+            # Vertex Positions
+            # x    y     z     nx    ny   nz, u, v
 
-      -0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 0.0,
-       0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 0.0,
-       0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 1.0,
-       0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 1.0,
-      -0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 1.0,
-      -0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 0.0,
+            -0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 0.0,
+            0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 0.0,
+            0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 1.0,
+            0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 1.0, 1.0,
+            -0.5,  0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 1.0,
+            -0.5, -0.5, -0.5,  0.0,  0.0, -1.0, 0.0, 0.0,
 
-      -0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 0.0,
-       0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 0.0,
-       0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 1.0,    
-       0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 1.0,
-      -0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 1.0,
-      -0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 0.0,
+            -0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 0.0,
+            0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 0.0,
+            0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 1.0,
+            0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 1.0, 1.0,
+            -0.5,  0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 1.0,
+            -0.5, -0.5,  0.5,  0.0,  0.0, 1.0, 0.0, 0.0,
 
-        -0.5,  0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 0.0,
-        -0.5,  0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 0.0,
-        -0.5, -0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 1.0,
-        -0.5, -0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 1.0,
-        -0.5, -0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 1.0,
-        -0.5,  0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 0.0,
+            -0.5,  0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 0.0,
+            -0.5,  0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 0.0,
+            -0.5, -0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 1.0,
+            -0.5, -0.5, -0.5, -1.0,  0.0,  0.0, 1.0, 1.0,
+            -0.5, -0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 1.0,
+            -0.5,  0.5,  0.5, -1.0,  0.0,  0.0, 0.0, 0.0,
 
-        0.5,  0.5,  0.5,  1.0,  0.0,  0.0,  0.0, 0.0,  
-        0.5,  0.5, -0.5,  1.0,  0.0,  0.0,  0.0, 1.0,  
-        0.5, -0.5, -0.5,  1.0,  0.0,  0.0,  1.0, 1.0,  
-        0.5, -0.5, -0.5,  1.0,  0.0,  0.0,  1.0, 1.0,  
-        0.5, -0.5,  0.5,  1.0,  0.0,  0.0,  1.0, 0.0,  
-        0.5,  0.5,  0.5,  1.0,  0.0,  0.0,  0.0, 0.0,  
+            0.5,  0.5,  0.5,  1.0,  0.0,  0.0,  0.0, 0.0,
+            0.5,  0.5, -0.5,  1.0,  0.0,  0.0,  0.0, 1.0,
+            0.5, -0.5, -0.5,  1.0,  0.0,  0.0,  1.0, 1.0,
+            0.5, -0.5, -0.5,  1.0,  0.0,  0.0,  1.0, 1.0,
+            0.5, -0.5,  0.5,  1.0,  0.0,  0.0,  1.0, 0.0,
+            0.5,  0.5,  0.5,  1.0,  0.0,  0.0,  0.0, 0.0,
 
-        -0.5, -0.5, -0.5,  0.0, -1.0,  0.0, 0.0, 0.0,
-        0.5, -0.5, -0.5,  0.0, -1.0,  0.0,  0.0, 1.0,
-        0.5, -0.5,  0.5,  0.0, -1.0,  0.0,  1.0, 1.0,
-        0.5, -0.5,  0.5,  0.0, -1.0,  0.0,  1.0, 1.0,
-        -0.5, -0.5,  0.5,  0.0, -1.0,  0.0, 1.0, 0.0,
-        -0.5, -0.5, -0.5,  0.0, -1.0,  0.0, 0.0, 0.0,
+            -0.5, -0.5, -0.5,  0.0, -1.0,  0.0, 0.0, 0.0,
+            0.5, -0.5, -0.5,  0.0, -1.0,  0.0,  0.0, 1.0,
+            0.5, -0.5,  0.5,  0.0, -1.0,  0.0,  1.0, 1.0,
+            0.5, -0.5,  0.5,  0.0, -1.0,  0.0,  1.0, 1.0,
+            -0.5, -0.5,  0.5,  0.0, -1.0,  0.0, 1.0, 0.0,
+            -0.5, -0.5, -0.5,  0.0, -1.0,  0.0, 0.0, 0.0,
 
-        -0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 0.0,
-        0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 1.0,
-        0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 1.0,
-        0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 1.0,
-        -0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 0.0,
-        -0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 0.0
+            -0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 0.0,
+            0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 1.0,
+            0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 1.0,
+            0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 1.0,
+            -0.5,  0.5,  0.5,  0.0,  1.0,  0.0,  1.0, 0.0,
+            -0.5,  0.5, -0.5,  0.0,  1.0,  0.0,  0.0, 0.0
 
         ], dtype=np.float32)
 
@@ -260,8 +264,8 @@ class cube3D():
         modelLoc = GL.glGetUniformLocation(self.shaderProgram, "model")
         cameraLoc = GL.glGetUniformLocation(self.shaderProgram, "viewMatrix")
         persLoc = GL.glGetUniformLocation(self.shaderProgram, "perspective")
-        texture_location = GL.glGetUniformLocation(self.shaderProgram, "theTexture")
-
+        texture_location = GL.glGetUniformLocation(
+            self.shaderProgram, "theTexture")
 
         GL.glUniformMatrix4fv(modelLoc, 1, True, self.model)
         GL.glUniformMatrix4fv(persLoc, 1, True, PerspectiveMatrix)
@@ -280,8 +284,8 @@ class cube3D():
         try:
 
             # Activate the object
-            GL.glBindVertexArray(self.vao)            
-                
+            GL.glBindVertexArray(self.vao)
+
             if self.textureID is None:
                 self.configure_texture(self.img_path)
 

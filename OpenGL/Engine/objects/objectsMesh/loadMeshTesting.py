@@ -1,5 +1,6 @@
 
-# UNUSED, just for testing
+import numpy as np
+
 
 def loadMesh(filename: str) -> list[float]:
     v = []
@@ -23,6 +24,7 @@ def loadMesh(filename: str) -> list[float]:
             line = file.readline()
 
     # x, y, z, s, t, nx, ny, nz
+    vertices = np.array(vertices, dtype=np.float32)
     return vertices
 
 
@@ -89,13 +91,13 @@ def make_corner(corner_description: str,
 
     for element in v[int(v_vt_vn[0]) - 1]:
         vertices.append(element)
-    for element in vt[int(v_vt_vn[1]) - 1]:
-        vertices.append(element)
+    if v_vt_vn[1]:  # Check if the string is not empty
+        for element in vt[int(v_vt_vn[1]) - 1]:
+            vertices.append(element)
     for element in vn[int(v_vt_vn[2]) - 1]:
         vertices.append(element)
 
 
 if __name__ == "__main__":
-    vertices, faces = loadMesh("cubeMesh.obj")
+    vertices = loadMesh("Engine\objects\objectsMesh\plane.obj")
     print(vertices)
-    print(faces)
