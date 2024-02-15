@@ -1,9 +1,7 @@
 import Engine
 
 from objects.cube import cube3D
-from scene import Scene
-from camera import Camera
-from light import Light
+from scenes.blendScene import scene
 
 
 def run():
@@ -13,24 +11,9 @@ def run():
     with open("shaders/fragment.txt", "r") as f:
         fragmentShaderStr = f.read()
 
-    # objects = createPaintingObjects()
-    objects = createFromMesh()
+    myScene = scene()
 
-    # camera settings
-    initCameraPos = [0, 0, 20]
-    camTarget = [0, 0, 0]
-
-    # light settings
-    initLightPos = [0.0, 0.0, 0.0]
-    ambInt = 0.3
-    ambCol = [1.0, 1.0, 1.0]
-
-    camera = Camera(initCameraPos, camTarget)
-    light = Light(initLightPos, ambInt, ambCol)
-
-    scene = Scene(objects, camera, light)
-
-    Engine.run(scene, vertexShaderStr, fragmentShaderStr)
+    Engine.run(myScene, vertexShaderStr, fragmentShaderStr)
 
 
 def createPaintingObjects() -> list[cube3D]:

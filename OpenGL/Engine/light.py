@@ -8,7 +8,7 @@ class Light:
 
     def getPos(self) -> list[float, float, float]:
         return self.currentPos
-    
+
     def getAmbInt(self) -> float:
         return self.ambInt
 

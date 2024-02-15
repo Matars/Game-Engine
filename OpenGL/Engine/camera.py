@@ -8,11 +8,12 @@ def normalize(v): return v / np.linalg.norm(v)
 
 
 class Camera:
-    def __init__(self, initialPos: list[float, float, float], camTarget: list[float, float, float]) -> None:
+    def __init__(self, initialPos: list[float, float, float] = [0, 0, 0], camTarget: list[float, float, float] = [0, 0, 0]) -> None:
 
         self.initCameraPos = np.array(initialPos, dtype=np.float32)
-        self.cameraPos = self.initCameraPos
         self.cameraTarget = camTarget
+
+        self.cameraPos = self.initCameraPos
 
         self.upvector = np.array([0.0, 1.0, 0.0], dtype=np.float32)
         self.cameraFront = np.array([0.0, 0.0, -1.0], dtype=np.float32)

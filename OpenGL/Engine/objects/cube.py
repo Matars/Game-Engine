@@ -13,19 +13,18 @@ from objects.objectsMesh.loadMeshTesting import loadMesh
 
 
 class cube3D():
-    def __init__(self, img_path):
+    def __init__(self, img_path=None):
         self.model = np.identity(4)
-        # self.vertices = self.cubeMesh()
-        self.vertices = loadMesh("objects\objectsMesh\plane.obj")
+        self.vertices = self.cubeMesh()
+        # self.vertices = loadMesh("objects\objectsMesh\plane.obj")
 
         self.shaderProgram = None
         self.vao = None
         self.vbo = None
         self.ebo = None  # unused
         self.faces = None  # unused
-
-        self.img_path = img_path
         self.textureID = None
+        self.img_path = img_path
 
         # probably should not be here
         self.transform(np.identity(4))
@@ -246,12 +245,14 @@ class cube3D():
 
         return verticies
 
+
     def display(self, camera, light) -> None:
         """
         Displays the object.
 
         Args:
             camera (Camera): The camera object.
+            light (Light): The light object.
         """
 
         LookMatrix = camera.getViewMatrix()
@@ -286,10 +287,9 @@ class cube3D():
             # Activate the object
             GL.glBindVertexArray(self.vao)
 
-            if self.textureID is None:
+            if self.textureID is None and self.img_path is not None:
                 self.configure_texture(self.img_path)
-
-            GL.glBindTexture(GL.GL_TEXTURE_2D, self.textureID)
+                GL.glBindTexture(GL.GL_TEXTURE_2D, self.textureID)
 
             # draw triangle
             GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL)
