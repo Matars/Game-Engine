@@ -5,6 +5,7 @@ from scene import Scene
 from camera import Camera
 from light import Light
 
+
 def run():
     # get camera position
     with open("shaders/vertex.txt", "r") as f:
@@ -12,8 +13,8 @@ def run():
     with open("shaders/fragment.txt", "r") as f:
         fragmentShaderStr = f.read()
 
-    # objects = createObjects()
-    objects = createPaintingObjects()
+    # objects = createPaintingObjects()
+    objects = createFromMesh()
 
     # camera settings
     initCameraPos = [0, 0, 20]
@@ -24,17 +25,10 @@ def run():
     ambInt = 0.3
     ambCol = [1.0, 1.0, 1.0]
 
-    # second light 
-    initLightPos2 = [0.0, 1.0, 0.0]
-    ambInt2 = 3
-    ambCol2 = [1.0, 0.0, 0.0]
-    
     camera = Camera(initCameraPos, camTarget)
     light = Light(initLightPos, ambInt, ambCol)
-    light2 = Light(initLightPos2, ambInt2, ambCol2)
 
-    lights = [light, light2]
-    scene = Scene(objects, camera, lights)
+    scene = Scene(objects, camera, light)
 
     Engine.run(scene, vertexShaderStr, fragmentShaderStr)
 
@@ -43,7 +37,7 @@ def createPaintingObjects() -> list[cube3D]:
 
     painting_edvard = cube3D("gfx/Edvard_Munch.jpeg")
     painting_franz = cube3D("gfx/Franz_von_Stuck.jpeg")
-    
+
     wall1 = cube3D("gfx/bricks.png")
     wall2 = cube3D("gfx/bricks.png")
     wall3 = cube3D("gfx/bricks.png")
@@ -81,7 +75,7 @@ def createPaintingObjects() -> list[cube3D]:
 
     painting_vince.translate(25, 0, -19)
     frame_vince.translate(25, 0, -19.5)
-    
+
     frame_vince.scale(10, 17, 0.1)
     painting_vince.scale(9, 16, 0.1)
 
@@ -108,10 +102,17 @@ def createPaintingObjects() -> list[cube3D]:
     frame_edvard.scale(10, 17, 0.1)
     painting_edvard.scale(9, 16, 0.1)
 
-
-    objects = [wall1, wall2, wall3, wall4, painting_thekiss, frame_thekiss, painting_vince, frame_vince, painting_franz, frame_franz, painting_edvard, frame_edvard]
+    objects = [wall1, wall2, wall3, wall4, painting_thekiss, frame_thekiss, painting_vince,
+               frame_vince, painting_franz, frame_franz, painting_edvard, frame_edvard]
 
     return objects
+
+
+def createFromMesh() -> list[cube3D]:
+    # create a cube
+    cube = cube3D("gfx/plane.png")
+
+    return [cube]
 
 
 if __name__ == "__main__":
